@@ -46,8 +46,9 @@ class LoginCommand extends Command {
 
 LoginCommand.description = `Login to deployment server and save it for future deployments
 
-Login using SSH to a deployment server running Docker and Nginx.
-Save this login for the current user for future deployment.
+Check login credentials, check if server is ready to deployments and 
+save server configuration for future deployments in ~/.config/user.json
+Existing server configuration will be overwritten in config.
 `
 
 LoginCommand.args = [
