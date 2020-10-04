@@ -58,6 +58,67 @@ class SshClient {
         })
     }
 
+    async exec(cmd){
+        return await new Promise((res,rej) => {
+            let stdout = "";
+            let stderr = "";
+            let log = "";
+            this.connection.exec(cmd, function(err, stream) {
+                if (err) return rej(err);
+                stream.on('close', function(code, signal) {
+                    if(code != 0){
+                        let err = new Error("Command return with non-zero code")
+                        err.cmd = cmd
+                        err.stdout = stdout
+                        err.stderr = stderr
+                        err.returnCode = code
+                        err.signal = signal
+                        err.log = log
+                        return rej(err)
+                    }
+                    return res({
+                        cmd,
+                        stdout,
+                        stderr,
+                        signal,
+                        log,
+                        returnCode: code
+                    })
+                }).on('data', function(data) {
+                    stdout += data
+                    log += data
+                }).stderr.on('data', function(data) {
+                    stderr += data
+                    log += data
+                });
+            });
+        })
+    }
+
+    async sendFile(localPath, remotePath, options){
+        return await new Promise((res,rej) => {
+            this.connection.sftp(function(err, sftp) {
+                if (err) return rej(err);
+                sftp.fastPut(localPath, remotePath, options, err => {
+                    if(err) return rej(err)
+                    return res()
+                })
+            });
+        })
+    }
+
+    async getFile(remotePath, localPath, options= {}){
+        return await new Promise((res,rej) => {
+            this.connection.sftp(function(err, sftp) {
+                if (err) return rej(err);
+                sftp.fastGet(remotePath, localPath, options, err => {
+                    if(err) return rej(err)
+                    return res()
+                })
+            });
+        })
+    }
+
     disconnect(){
         this.connection.end()
     }

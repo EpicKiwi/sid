@@ -11,9 +11,14 @@
     "@oclif/command": "^1.8.0",
     "@oclif/config": "^1.17.0",
     "@oclif/plugin-help": "^3.2.0",
+    "@webantic/nginx-config-parser": "^1.2.0",
+    "chalk": "^4.1.0",
     "cli-ux": "^5.5.0",
     "fs-extra": "^9.0.1",
-    "ssh2": "^0.8.9"
+    "listr": "^0.14.3",
+    "ssh2": "^0.8.9",
+    "tar": "^6.0.5",
+    "uuid": "^8.3.0"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1.22.2",
